@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParkLink</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --navy: #060f1e;
+      --navy2: #0b1a30;
+      --navy3: #112240;
+      --gold: #D4AF37;
+      --gold2: #FFD700;
+      --gold3: #b8941f;
+      --white: #f0eadc;
+      --dim: rgba(240, 234, 220, 0.55);
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass2: rgba(255, 255, 255, 0.08);
+      --border: rgba(212, 175, 55, 0.18);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 20% 10%, #0d2545 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 90%, #0a1e38 0%, transparent 55%), #060f1e;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: 0;
+      pointer-events: none;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .bg-orb1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(212, 175, 55, 0.07);
+      top: -100px;
+      left: -100px;
+    }
+
+    .bg-orb2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(11, 31, 58, 0.6);
+      bottom: -80px;
+      right: -80px;
+      animation-delay: -6s;
+    }
+
+    .bg-orb3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(212, 175, 55, 0.05);
+      top: 40%;
+      left: 60%;
+      animation-delay: -12s;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(40px, 30px) scale(1.08);
+      }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 6%;
+      background: rgba(6, 15, 30, 0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      animation: pulse-logo 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-logo {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 35px rgba(212, 175, 55, 0.7);
+      }
+    }
+
+    .logo h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: var(--white);
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-link {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold3), var(--gold2));
+      border: none;
+      padding: 10px 22px;
+      border-radius: 30px;
+      color: #0a1520;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(212, 175, 55, 0.55);
+    }
+
+    .btn-gold:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 10px 22px;
+      border-radius: 30px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.06);
+    }
+
+    #nav-user-name {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      display: none;
+    }
+
+    section {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: 100px 6% 60px;
+      display: none;
+    }
+
+    section.active {
+      display: block;
+      animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #welcome {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 50px;
+    }
+
+    #welcome.active {
+      display: flex;
+    }
+
+    .welcome-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 6px 18px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      animation: fadeUp 0.5s 0.1s both;
+    }
+
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      animation: fadeUp 0.5s 0.2s both;
+    }
+
+    .welcome-title .highlight {
+      background: linear-gradient(90deg, var(--gold3), var(--gold2), #fff, var(--gold2), var(--gold3));
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 5s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 300% center;
+      }
+    }
+
+    .welcome-sub {
+      color: var(--dim);
+      font-size: 17px;
+      max-width: 460px;
+      line-height: 1.7;
+      animation: fadeUp 0.5s 0.3s both;
+    }
+
+    .role-cards {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.5s 0.4s both;
+    }
+
+    .role-card {
+      width: 220px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 24px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .role-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .role-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: var(--gold);
+      box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
+    }
+
+    .role-card:hover::before {
+      opacity: 1;
+    }
+
+    .role-icon {
+      font-size: 42px;
+      margin-bottom: 16px;
+    }
+
+    .role-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .role-card p {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    #register {
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #register.active {
+      display: flex;
+    }
+
+    .reg-container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 44px;
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .reg-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.06);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(240, 234, 220, 0.3);
+    }
+
+    select.form-input option {
+      background: var(--navy2);
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: var(--white);
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked+.slider {
+      background: var(--gold);
+    }
+
+    input:checked+.slider::before {
+      transform: translateX(20px);
+      background: #0a1520;
+    }
+
+    .btn-full {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--gold3), var(--gold2));
+      border: none;
+      border-radius: 14px;
+      color: #0a1520;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
+      margin-top: 8px;
+    }
+
+    .btn-full:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn-full:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-divider {
+      text-align: center;
+      color: var(--dim);
+      font-size: 13px;
+      margin: 16px 0;
+    }
+
+    .form-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .form-tab {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      color: var(--dim);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .form-tab.active {
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    #find {
+      display: none;
+    }
+
+    #find.active {
+      display: block;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, #0d2040 0%, #0a1830 50%, #071525 100%);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.06) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .map-road-h {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(212, 175, 55, 0.15);
+    }
+
+    .map-road-v {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(212, 175, 55, 0.15);
+    }
+
+    .map-pin {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      animation: float-pin 3s ease-in-out infinite;
+      transition: transform 0.3s;
+    }
+
+    .map-pin:hover {
+      transform: scale(1.2) !important;
+    }
+
+    @keyframes float-pin {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .pin-bubble {
+      background: linear-gradient(135deg, var(--gold3), var(--gold2));
+      color: #0a1520;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+      margin-bottom: 4px;
+    }
+
+    .pin-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--gold2);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+    }
+
+    .pin-shadow {
+      width: 14px;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      margin-top: 2px;
+      filter: blur(2px);
+    }
+
+    .map-search {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .map-search input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(6, 15, 30, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .map-search input:focus {
+      border-color: var(--gold);
+    }
+
+    .map-search input::placeholder {
+      color: rgba(240, 234, 220, 0.35);
+    }
+
+    .map-badge {
+      background: rgba(6, 15, 30, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--gold);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .spot-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .spot-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+    }
+
+    .spot-img {
+      width: 100%;
+      height: 140px;
+      background: linear-gradient(135deg, #0d2040, #112240);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spot-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(6, 15, 30, 0.8) 100%);
+    }
+
+    .spot-status {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 200, 100, 0.2);
+      border: 1px solid rgba(0, 200, 100, 0.4);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #4eff99;
+      z-index: 2;
+    }
+
+    .spot-status.full {
+      background: rgba(255, 80, 80, 0.2);
+      border-color: rgba(255, 80, 80, 0.4);
+      color: #ff8080;
+    }
+
+    .spot-body {
+      padding: 18px;
+    }
+
+    .spot-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .spot-loc {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .spot-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spot-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .spot-price span {
+      font-size: 12px;
+      color: var(--dim);
+      font-weight: 400;
+    }
+
+    .spot-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .spot-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .spot-dot.filled {
+      background: var(--gold);
+    }
+
+    .reserve-panel {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-top: 16px;
+      display: none;
+      animation: fadeUp 0.4s both;
+    }
+
+    .reserve-panel.open {
+      display: block;
+    }
+
+    .time-picker {
+      display: flex;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .time-picker input {
+      flex: 1;
+    }
+
+    #confirm {
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #confirm.active {
+      display: flex;
+    }
+
+    .confirm-card {
+      max-width: 460px;
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(20px);
+    }
+
+    .confirm-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .confirm-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--gold3), var(--gold2));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 24px;
+      box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+      animation: pop-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes pop-in {
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .confirm-sub {
+      color: var(--dim);
+      font-size: 15px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 12px 0;
+      font-size: 14px;
+    }
+
+    .confirm-row:first-of-type {
+      border-top: none;
+    }
+
+    .confirm-row-label {
+      color: var(--dim);
+    }
+
+    .confirm-row-val {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .pay-method {
+      flex: 1;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 13px;
+    }
+
+    .pay-method.selected {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+      color: var(--gold);
+    }
+
+    .payment-details {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .payment-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .payment-field label {
+      color: var(--dim);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .payment-field input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .payment-field input:focus {
+      border-color: var(--gold);
+    }
+
+    .payment-field select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+    }
+
+    .payment-field select:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .payment-field select:focus {
+      border-color: var(--gold);
+    }
+
+    .payment-field select option {
+      background: #1a1a1a;
+      color: var(--white);
+    }
+
+    .invoice-btn {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .invoice-btn:hover {
+      background: rgba(212, 175, 55, 0.12);
+    }
+
+    #dashboard {
+      display: none;
+    }
+
+    #dashboard.active {
+      display: block;
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-box {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .stat-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(212, 175, 55, 0.12);
+    }
+
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: rgba(74, 200, 120, 0.8);
+      margin-top: 4px;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    .dash-panel {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .dash-panel h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--white);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 140px;
+      margin-bottom: 10px;
+    }
+
+    .chart-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chart-bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--gold2), var(--gold3));
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: bar-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      position: relative;
+    }
+
+    .chart-bar::after {
+      content: attr(data-val);
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .chart-bar:hover {
+      filter: brightness(1.2);
+    }
+
+    @keyframes bar-rise {
+      from {
+        transform: scaleY(0);
+        transform-origin: bottom;
+      }
+
+      to {
+        transform: scaleY(1);
+        transform-origin: bottom;
+      }
+    }
+
+    .chart-day {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .booking-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .booking-item:last-child {
+      border-bottom: none;
+    }
+
+    .booking-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .booking-info {
+      flex: 1;
+    }
+
+    .booking-name {
+      font-size: 14px;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .booking-time {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    .booking-amt {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .status-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .status-confirmed {
+      background: rgba(0, 200, 100, 0.15);
+      color: #4eff99;
+      border: 1px solid rgba(0, 200, 100, 0.3);
+    }
+
+    .status-cancelled {
+      background: rgba(255, 80, 80, 0.15);
+      color: #ff8080;
+      border: 1px solid rgba(255, 80, 80, 0.3);
+    }
+
+    .status-completed {
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    #list {
+      display: none;
+    }
+
+    #list.active {
+      display: block;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 900px;
+    }
+
+    .rate-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .rate-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .rate-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .rate-row label {
+      font-size: 12px;
+      color: var(--dim);
+      width: 120px;
+      flex-shrink: 0;
+    }
+
+    .rate-input {
+      flex: 1;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .rate-input:focus {
+      border-color: var(--gold);
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .analytics-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .analytics-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .donut {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 16px;
+    }
+
+    .donut svg {
+      transform: rotate(-90deg);
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donut-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .donut-sub2 {
+      font-size: 10px;
+      color: var(--dim);
+    }
+
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+
+    .fee-row:last-child {
+      border-bottom: none;
+    }
+
+    .fee-name {
+      color: var(--dim);
+    }
+
+    .fee-pct {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .fee-total {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(6, 15, 30, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+      position: relative;
+    }
+
+    .modal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--navy);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(212, 175, 55, 0.6);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy2);
+      border: 1px solid var(--gold);
+      border-radius: 14px;
+      padding: 14px 24px;
+      font-size: 14px;
+      color: var(--white);
+      z-index: 300;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.error {
+      border-color: #ff6b6b;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(10, 21, 32, 0.3);
+      border-top-color: #0a1520;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .list-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav {
+        padding: 14px 5%;
+      }
+
+      section {
+        padding: 90px 5% 50px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-layer"></div>
+  <div class="bg-orb bg-orb1"></div>
+  <div class="bg-orb bg-orb2"></div>
+  <div class="bg-orb bg-orb3"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">🅿</div>
+      <h1>Park<span>Link</span></h1>
+    </div>
+    <div class="nav-right">
+      <button class="nav-link" onclick="showSection('find')">Explore</button>
+      <button class="nav-link" onclick="goDashboard()">Dashboard</button>
+      <span id="nav-user-name"></span>
+      <button class="btn-gold" id="nav-auth-btn" onclick="showSection('register')">Sign In</button>
+    </div>
+  </nav>
+
+  <!-- WELCOME -->
+  <section id="welcome" class="active">
+    <div class="welcome-badge">✦ Premium Parking Network</div>
+    <div>
+      <h1 class="welcome-title">Smart Parking<br><span class="highlight">Reimagined</span></h1>
+      <p class="welcome-sub">Discover, reserve, and manage parking spaces with luxury-grade simplicity.</p>
+    </div>
+    <div class="role-cards">
+      <div class="role-card" onclick="selectRole('driver')">
+        <div class="role-icon">🚗</div>
+        <h3>I'm a Driver</h3>
+        <p>Find and reserve premium parking spots near you instantly.</p>
+      </div>
+      <div class="role-card" onclick="selectRole('owner')">
+        <div class="role-icon">🏢</div>
+        <h3>I'm an Owner</h3>
+        <p>List your space, set rates, and manage bookings effortlessly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER / LOGIN -->
+  <section id="register">
+    <div class="reg-container">
+      <div class="section-header" style="text-align:center; margin-bottom:24px;">
+        <span class="section-label" id="reg-role-label">Driver Registration</span>
+        <h2 style="font-size:34px;" id="reg-heading">Create Account</h2>
+      </div>
+
+      <div class="form-tabs">
+        <button class="form-tab active" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+        <button class="form-tab" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+      </div>
+
+      <!-- Register Fields -->
+      <div id="register-fields">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" id="reg-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="reg-password" placeholder="Min 6 characters">
+        </div>
+        <div class="form-group" id="vehicle-group">
+          <label class="form-label">Vehicle Number</label>
+          <input class="form-input" id="reg-vehicle" placeholder="e.g. TN 01 AB 1234">
+        </div>
+        <div class="form-group" id="property-group" style="display:none;">
+          <label class="form-label">Property Type</label>
+          <select class="form-input" id="reg-property">
+            <option value="">Select property type</option>
+            <option>Commercial Building</option>
+            <option>Residential Complex</option>
+            <option>Open Plot</option>
+          </select>
+        </div>
+        <div class="toggle-switch">
+          <label class="switch"><input type="checkbox" checked id="reg-notif"><span class="slider"></span></label>
+          <span class="toggle-label">Enable booking notifications</span>
+        </div>
+        <button class="btn-full" id="reg-btn" onclick="doRegister()">Link & Continue →</button>
+      </div>
+
+      <!-- Login Fields -->
+      <div id="login-fields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" id="login-email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="login-password" placeholder="Your password">
+        </div>
+        <button class="btn-full" id="login-btn" onclick="doLogin()">Sign In →</button>
+      </div>
+
+      <div class="form-divider">— or —</div>
+      <button class="btn-outline" style="width:100%; padding:13px;" onclick="showSection('find')">Continue as
+        Guest</button>
+    </div>
+  </section>
+
+  <!-- FIND PARKING -->
+  <section id="find">
+    <div class="section-header">
+      <span class="section-label">✦ Live Map</span>
+      <h2>Find Parking</h2>
+    </div>
+    <div class="map-container">
+      <div class="map-grid"></div>
+      <div class="map-road-h" style="top:40%;"></div>
+      <div class="map-road-h" style="top:70%;"></div>
+      <div class="map-road-v" style="left:35%;"></div>
+      <div class="map-road-v" style="left:65%;"></div>
+      <div id="map-pins"></div>
+      <div class="map-search">
+        <input placeholder="🔍  Search location or area..." id="search-input" oninput="filterSpots(this.value)">
+        <div class="map-badge">📍 Chennai</div>
+      </div>
+    </div>
+    <div class="spots-grid" id="spots-grid"></div>
+    <div class="reserve-panel" id="reserve-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--gold);" id="panel-name"></h3>
+        <span style="font-size:22px; font-weight:700; color:var(--gold);" id="panel-price"></span>
+      </div>
+      <div
+        style="display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:220px;">
+          <div class="form-label">Booking Mode</div>
+          <div id="slot-mode-info" style="font-size:13px; color:var(--dim); margin-top:6px;">Auto-selected today’s next
+            available slot.</div>
+        </div>
+        <div class="toggle-switch" style="margin:0;">
+          <label class="switch"><input type="checkbox" id="preorder-toggle"
+              onchange="togglePreorder(this.checked)"><span class="slider"></span></label>
+          <span class="toggle-label">Pre-order</span>
+        </div>
+      </div>
+      <div class="time-picker" id="custom-time-panel" style="display:none;">
+        <div class="form-group" style="flex:1; margin:0;">
+          <label class="form-label">From</label>
+          <input class="form-input" type="time" value="14:00" id="time-from">
+        </div>
+        <div class="form-group" style="flex:1; margin:0;">
+          <label class="form-label">To</label>
+          <input class="form-input" type="time" value="16:00" id="time-to">
+        </div>
+        <div class="form-group" style="flex:1; margin:0;">
+          <label class="form-label">Date</label>
+          <input class="form-input" type="date" id="book-date">
+        </div>
+      </div>
+      <div id="selected-slot-summary"
+        style="display:none; margin-top:18px; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px; background:rgba(255,255,255,0.04);">
+        <div style="font-size:13px; color:var(--dim); margin-bottom:8px;">Selected slot</div>
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div><strong id="summary-slot-time">—</strong></div>
+          <div style="color:var(--gold); font-weight:700;" id="summary-slot-total">₹0</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <div class="form-label">Available Slots</div>
+        <div id="slot-list"
+          style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:10px;">
+          <div style="color:var(--dim); font-size:13px;">Select a slot to book today or switch to pre-order to change
+            the time.</div>
+        </div>
+      </div>
+      <div class="confirm-row" id="booking-summary" style="margin-bottom:6px; display:none;">
+        <span class="confirm-row-label">Duration</span>
+        <span class="confirm-row-val" id="calc-dur">2 hrs</span>
+      </div>
+      <div class="confirm-row" id="booking-total" style="margin-bottom:16px; display:none;">
+        <span class="confirm-row-label">Total Charges</span>
+        <span class="confirm-row-val" id="calc-total"
+          style="color:var(--gold); font-size:20px; font-weight:700;">₹0</span>
+      </div>
+      <button class="btn-full" onclick="goConfirm()">Reserve & Link 🔗</button>
+    </div>
+  </section>
+
+  <!-- BOOKING CONFIRM -->
+  <section id="confirm">
+    <div class="confirm-card">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">Confirm Booking</div>
+      <div class="confirm-sub">Review your booking details below.</div>
+      <div
+        style="border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:20px; text-align:left;">
+        <div class="confirm-row"><span class="confirm-row-label">Location</span><span class="confirm-row-val"
+            id="cf-loc"></span></div>
+        <div class="confirm-row"><span class="confirm-row-label">Date</span><span class="confirm-row-val"
+            id="cf-date"></span></div>
+        <div class="confirm-row"><span class="confirm-row-label">Time</span><span class="confirm-row-val"
+            id="cf-time"></span></div>
+        <div class="confirm-row"><span class="confirm-row-label">Duration</span><span class="confirm-row-val"
+            id="cf-dur"></span></div>
+        <div class="confirm-row"><span class="confirm-row-label">Total</span><span class="confirm-row-val"
+            style="color:var(--gold); font-weight:700;" id="cf-total"></span></div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div
+          style="font-size:12px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">
+          Payment Method</div>
+        <div class="payment-methods">
+          <div class="pay-method selected" onclick="selectPay(this)" data-method="Card">💳 Card</div>
+          <div class="pay-method" onclick="selectPay(this)" data-method="UPI">📱 UPI</div>
+          <div class="pay-method" onclick="selectPay(this)" data-method="ApplePay">🍎 Pay</div>
+        </div>
+        <div class="payment-details" id="payment-details"></div>
+      </div>
+      <button class="btn-full" id="pay-btn" style="margin-bottom:12px;" onclick="confirmBooking()">Confirm &
+        Pay</button>
+      <button class="invoice-btn" id="download-invoice-btn" style="display:none; margin-bottom:12px;"
+        onclick="downloadInvoice()">Download Invoice PDF</button>
+      <button class="btn-outline" style="width:100%; padding:12px;" onclick="showSection('find')">Back to Map</button>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <div class="section-header">
+      <span class="section-label">✦ Overview</span>
+      <h2 id="dash-title">Analytics Dashboard</h2>
+    </div>
+    <div class="dash-stats" id="dash-stats">
+      <div class="stat-box">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-label">Loading</div>
+        <div class="stat-value">—</div>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-panel">
+        <h3>Weekly Activity</h3>
+        <div class="chart-bars" id="chart-bars"></div>
+        <div style="display:flex; gap:10px;" id="chart-days"></div>
+      </div>
+      <div class="dash-panel">
+        <h3>Recent Bookings</h3>
+        <div id="recent-bookings">
+          <div style="color:var(--dim); font-size:13px;">Loading...</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px;" class="analytics-grid">
+      <div class="analytics-card" id="dash-occupancy-card">
+        <h3>Occupancy Rate</h3>
+        <div class="donut">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14" />
+            <circle id="donut-arc" cx="60" cy="60" r="50" fill="none" stroke="url(#goldGrad)" stroke-width="14"
+              stroke-dasharray="314" stroke-dashoffset="78" stroke-linecap="round">
+            </circle>
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#b8941f" />
+                <stop offset="100%" style="stop-color:#FFD700" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-val" id="donut-val">—</div>
+            <div class="donut-sub2">occupied</div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:var(--dim);" id="donut-sub">Loading...</div>
+      </div>
+      <div class="analytics-card">
+        <h3>My Bookings</h3>
+        <div id="my-bookings-list">
+          <div style="color:var(--dim); font-size:13px;">Loading...</div>
+        </div>
+      </div>
+      <div class="analytics-card">
+        <h3>Account</h3>
+        <div id="dash-account-info" style="font-size:14px; color:var(--dim); line-height:2;">Loading...</div>
+        <button class="btn-outline" style="width:100%; padding:12px; margin-top:14px; font-size:13px;"
+          onclick="doLogout()">Sign Out →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIST SPACE (Owner) -->
+  <section id="list">
+    <div class="section-header">
+      <span class="section-label">✦ Owner Portal</span>
+      <h2>Manage Your Spots</h2>
+    </div>
+    <div class="list-grid">
+      <div>
+        <div class="rate-card" style="margin-bottom:18px;">
+          <h3>Add New Spot</h3>
+          <div class="form-group"><label class="form-label">Location Name</label><input class="form-input"
+              id="new-spot-name" placeholder="e.g. Downtown Garage"></div>
+          <div class="form-group"><label class="form-label">Full Address</label><input class="form-input"
+              id="new-spot-addr" placeholder="Street, City"></div>
+          <div class="form-group"><label class="form-label">Total Spots</label><input class="form-input" type="number"
+              id="new-spot-total" placeholder="e.g. 40"></div>
+          <button class="btn-full" onclick="addSpot()">Add New Spot</button>
+        </div>
+      </div>
+      <div>
+        <div class="rate-card">
+          <h3>Rate Settings</h3>
+          <div id="my-spots-rate-selector" style="margin-bottom:14px;">
+            <select class="form-input" id="rate-spot-select" onchange="loadSpotRates()">
+              <option value="">— Select a spot —</option>
+            </select>
+          </div>
+          <div class="rate-row"><label>Peak Rate (₹/hr)</label><input class="rate-input" id="rate-peak" value="9.00">
+          </div>
+          <div class="rate-row"><label>Off-peak Rate (₹/hr)</label><input class="rate-input" id="rate-offpeak"
+              value="6.00"></div>
+          <div class="rate-row"><label>Weekend Rate (₹/hr)</label><input class="rate-input" id="rate-weekend"
+              value="7.00"></div>
+          <button class="btn-full" style="margin-top:12px;" onclick="saveRates()">Save Rates</button>
+        </div>
+        <div class="rate-card" style="margin-top:18px;">
+          <h3>Managed Properties</h3>
+          <div id="managed-spots-list">
+            <div style="color:var(--dim); font-size:13px;">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"><span id="toast-text">Done!</span></div>
+  <script>
+    // ─── jsPDF LIBRARY LOADER ───
+    let jsPDFReady = false;
+    function loadPDFLibrary() {
+      return new Promise((resolve, reject) => {
+        if (window.jspdf || window.jsPDF) {
+          jsPDFReady = true;
+          return resolve();
+        }
+        const existing = document.getElementById('jspdf-loader');
+        if (existing) {
+          existing.addEventListener('load', () => {
+            jsPDFReady = true;
+            resolve();
+          });
+          existing.addEventListener('error', () => reject(new Error('Failed to load jsPDF library.')));
+          return;
+        }
+        const script = document.createElement('script');
+        script.id = 'jspdf-loader';
+        script.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
+        script.onload = () => {
+          jsPDFReady = true;
+          resolve();
+        };
+        script.onerror = () => reject(new Error('Failed to load jsPDF library.'));
+        document.head.appendChild(script);
+      });
+    }
+
+    async function ensurePDFLibrary() {
+      if (window.jspdf || window.jsPDF) {
+        jsPDFReady = true;
+        return;
+      }
+      await loadPDFLibrary();
+      if (!window.jspdf && !window.jsPDF) {
+        throw new Error('jsPDF failed to initialize.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPDFLibrary().catch(() => { });
+    });
+
+    // ─── STATE ───
+    let currentRole = 'driver';
+    let selectedSpot = null;
+    let selectedSlotDate = null;
+    let selectedSlotFrom = null;
+    let selectedSlotTo = null;
+    let authToken = localStorage.getItem('parklink_token') || '';
+    let currentUser = JSON.parse(localStorage.getItem('parklink_user') || 'null');
+    let allSpots = [];
+    let authTab = 'register';
+    let isPreOrder = false;
+
+    function getCookie(name) {
+      const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+      return matches ? decodeURIComponent(matches[1]) : '';
+    }
+
+    async function loadCurrentUser() {
+      if (!currentUser && !authToken) {
+        authToken = getCookie('parklink_token') || '';
+      }
+      if (!currentUser && authToken) {
+        try {
+          currentUser = await api('/api/me');
+          currentRole = currentUser?.role || currentRole;
+          localStorage.setItem('parklink_user', JSON.stringify(currentUser));
+        } catch (e) {
+          authToken = '';
+          currentUser = null;
+          localStorage.removeItem('parklink_token');
+          localStorage.removeItem('parklink_user');
+          console.warn('Failed to restore session', e);
+        }
+      }
+      updateNavUI();
+    }
+
+    // ─── BOOT ───
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadCurrentUser();
+      loadSpots();
+      const today = getLocalDateString();
+      document.getElementById('book-date').min = today;
+      document.getElementById('book-date').value = today;
+      document.getElementById('time-from').addEventListener('change', () => { calcTotal(); if (isPreOrder) refreshAvailability(); });
+      document.getElementById('time-to').addEventListener('change', () => { calcTotal(); if (isPreOrder) refreshAvailability(); });
+      document.getElementById('book-date').addEventListener('change', () => { if (selectedSpot && !isPreOrder) refreshAvailability(); calcTotal(); });
+      if (currentUser) {
+        showSection(currentUser.role === 'driver' ? 'find' : 'list');
+      } else {
+        showSection('welcome');
+      }
+    });
+
+    function padNumber(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function getLocalDateString(date = new Date()) {
+      return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`;
+    }
+
+    function formatAmPm(time) {
+      let [h, m] = time.split(':').map(Number);
+      const roundedMinutes = Math.round(m / 30) * 30;
+      if (roundedMinutes === 60) {
+        h += 1;
+        m = 0;
+      } else {
+        m = roundedMinutes;
+      }
+      const suffix = h >= 12 ? 'PM' : 'AM';
+      const hour = h % 12 === 0 ? 12 : h % 12;
+      return `${hour}:${padNumber(m)} ${suffix}`;
+    }
+
+    function getAutoSlot() {
+      const now = new Date();
+      let start = new Date(now);
+      const minutes = now.getMinutes();
+      if (minutes <= 30) start.setMinutes(30, 0, 0);
+      else {
+        start.setHours(start.getHours() + 1, 0, 0, 0);
+      }
+      if (start.getHours() >= 22) {
+        start.setHours(18, 0, 0, 0);
+      }
+      const end = new Date(start.getTime() + 60 * 60 * 1000);
+      return {
+        from: `${padNumber(start.getHours())}:${padNumber(start.getMinutes())}`,
+        to: `${padNumber(end.getHours())}:${padNumber(end.getMinutes())}`
+      };
+    }
+
+    async function setDefaultSlot() {
+      selectedSlotDate = selectedSlotFrom = selectedSlotTo = null;
+      const today = getLocalDateString();
+      document.getElementById('book-date').value = today;
+      document.getElementById('book-date').min = today;
+      const autoSlot = getAutoSlot();
+      document.getElementById('time-from').value = autoSlot.from;
+      document.getElementById('time-to').value = autoSlot.to;
+      document.getElementById('slot-mode-info').textContent = selectedSpot && selectedSpot.available > 0
+        ? 'Pick one of the free slots below to reserve this parking.'
+        : 'No slots available today for this location.';
+      if (!isPreOrder) {
+        await refreshAvailability();
+      } else {
+        document.getElementById('slot-list').innerHTML = '<div style="color:var(--dim); font-size:13px;">Pre-order mode active. Choose custom date and time above.</div>';
+      }
+    }
+
+    async function refreshAvailability() {
+      if (!selectedSpot) return;
+      const date = document.getElementById('book-date').value;
+      const slotList = document.getElementById('slot-list');
+      slotList.innerHTML = '<div style="color:var(--dim); font-size:13px;">Loading slots…</div>';
+      try {
+        const data = await api(`/api/spots/${selectedSpot.id}/availability?date=${date}`);
+        if (!data.available_slots.length) {
+          slotList.innerHTML = '<div style="color:var(--dim); font-size:13px;">No free slots available for this date.</div>';
+          return;
+        }
+        slotList.innerHTML = data.available_slots.map(slot => {
+          const label = `${formatAmPm(slot.from)} – ${formatAmPm(slot.to)}`;
+          const duration = Math.ceil((parseInt(slot.to.split(':')[0]) * 60 + parseInt(slot.to.split(':')[1]) - (parseInt(slot.from.split(':')[0]) * 60 + parseInt(slot.from.split(':')[1]))) / 60);
+          return `<button class="btn-outline" type="button" onclick="selectAvailableSlot('${slot.date}','${slot.from}','${slot.to}')" style="padding:14px 12px; text-align:left; min-width:140px; line-height:1.4; display:flex; flex-direction:column; gap:4px;"><span style="font-weight:700;">${label}</span><span style="font-size:12px; color:var(--dim);">Free for ${duration} hr${duration > 1 ? 's' : ''}</span></button>`;
+        }).join('');
+      } catch (e) {
+        slotList.innerHTML = `<div style="color:#ff6b6b; font-size:13px;">Failed to load slots.</div>`;
+      }
+    }
+
+    function selectAvailableSlot(date, from, to) {
+      selectedSlotDate = date;
+      selectedSlotFrom = from;
+      selectedSlotTo = to;
+      document.getElementById('book-date').value = date;
+      document.getElementById('time-from').value = from;
+      document.getElementById('time-to').value = to;
+      document.getElementById('booking-summary').style.display = 'block';
+      document.getElementById('booking-total').style.display = 'block';
+      const total = calcTotal();
+      document.getElementById('summary-slot-time').textContent = `${formatAmPm(from)} – ${formatAmPm(to)} on ${date}`;
+      document.getElementById('summary-slot-total').textContent = `₹${total.total}`;
+      document.getElementById('selected-slot-summary').style.display = 'block';
+      if (!isPreOrder) {
+        document.getElementById('time-from').disabled = true;
+        document.getElementById('time-to').disabled = true;
+        document.getElementById('book-date').disabled = true;
+        document.getElementById('slot-mode-info').textContent = `Selected slot ${formatAmPm(from)} – ${formatAmPm(to)}.`;
+        if (!currentUser) { showToast('⚠ Please sign in to book', true); showSection('register'); return; }
+        goConfirm();
+        return;
+      }
+      document.getElementById('slot-mode-info').textContent = `Pre-order slot selected: ${formatAmPm(from)} – ${formatAmPm(to)}. You can edit the time above.`;
+    }
+
+    function togglePreorder(enabled) {
+      if (!selectedSpot) {
+        document.getElementById('preorder-toggle').checked = false;
+        return;
+      }
+      if (!enabled) {
+        isPreOrder = false;
+        document.getElementById('custom-time-panel').style.display = 'none';
+        document.getElementById('time-from').disabled = true;
+        document.getElementById('time-to').disabled = true;
+        document.getElementById('book-date').disabled = true;
+        document.getElementById('slot-mode-info').textContent = 'Non-preorder mode active. Pick a free slot to book immediately.';
+        setDefaultSlot();
+        return;
+      }
+      isPreOrder = true;
+      selectedSlotDate = selectedSlotFrom = selectedSlotTo = null;
+      document.getElementById('custom-time-panel').style.display = 'flex';
+      document.getElementById('time-from').disabled = false;
+      document.getElementById('time-to').disabled = false;
+      document.getElementById('book-date').disabled = false;
+      document.getElementById('slot-mode-info').textContent = 'Pre-order mode enabled. Choose a custom date and time, then confirm your booking.';
+      document.getElementById('slot-list').innerHTML = '<div style="color:var(--dim); font-size:13px;">Pre-order mode active. Slot availability list is disabled while you select your own time.</div>';
+      calcTotal();
+    }
+
+    // ─── API HELPER ───
+    async function api(path, method = 'GET', body = null) {
+      if (!authToken) {
+        authToken = getCookie('parklink_token') || '';
+      }
+      const opts = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      };
+      if (authToken) opts.headers['X-Auth-Token'] = authToken;
+      if (body) opts.body = JSON.stringify(body);
+      const res = await fetch(path, opts);
+      const text = await res.text();
+      let data = {};
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          data = { error: text };
+        }
+      }
+      if (!res.ok) {
+        if (res.status === 401) {
+          authToken = '';
+          currentUser = null;
+          localStorage.removeItem('parklink_token');
+          localStorage.removeItem('parklink_user');
+          updateNavUI();
+        }
+        throw new Error(data.error || res.statusText || 'Request failed');
+      }
+      return data;
+    }
+
+    // ─── SECTION NAV ───
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (id === 'dashboard') loadDashboard();
+      if (id === 'list') loadOwnerPortal();
+      if (id === 'confirm') {
+        const selected = document.querySelector('.pay-method.selected');
+        renderPaymentFields(selected?.dataset.method || 'Card');
+      }
+    }
+
+    // ─── NAV UI ───
+    function updateNavUI() {
+      const nameEl = document.getElementById('nav-user-name');
+      const btnEl = document.getElementById('nav-auth-btn');
+      if (currentUser) {
+        nameEl.style.display = 'inline';
+        nameEl.textContent = '👤 ' + currentUser.name;
+        btnEl.textContent = 'Sign Out';
+        btnEl.onclick = doLogout;
+      } else {
+        nameEl.style.display = 'none';
+        btnEl.textContent = 'Sign In';
+        btnEl.onclick = () => showSection('register');
+      }
+    }
+
+    // ─── ROLE SELECT ───
+    function selectRole(role) {
+      currentRole = role;
+      document.getElementById('reg-role-label').textContent =
+        role === 'driver' ? 'Driver Registration' : 'Owner Registration';
+      document.getElementById('vehicle-group').style.display = role === 'driver' ? '' : 'none';
+      document.getElementById('property-group').style.display = role === 'owner' ? '' : 'none';
+      showSection('register');
+    }
+
+    // ─── AUTH TABS ───
+    function switchAuthTab(tab) {
+      authTab = tab;
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('register-fields').style.display = tab === 'register' ? '' : 'none';
+      document.getElementById('login-fields').style.display = tab === 'login' ? '' : 'none';
+      document.getElementById('reg-heading').textContent = tab === 'register' ? 'Create Account' : 'Welcome Back';
+    }
+
+    // ─── REGISTER ───
+    async function doRegister() {
+      const btn = document.getElementById('reg-btn');
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      if (!name || !email || !password) { showToast('⚠ Please fill all fields', true); return; }
+
+      setLoading(btn, true);
+      try {
+        const data = await api('/api/register', 'POST', {
+          name, email, password, role: currentRole,
+          vehicle_no: document.getElementById('reg-vehicle').value,
+          property_type: document.getElementById('reg-property').value,
+          notifications: document.getElementById('reg-notif').checked ? 1 : 0
+        });
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('parklink_token', authToken);
+        localStorage.setItem('parklink_user', JSON.stringify(currentUser));
+        updateNavUI();
+        showToast('✓ ' + data.message);
+        setTimeout(() => showSection(currentRole === 'driver' ? 'find' : 'list'), 800);
+      } catch (e) { showToast('✗ ' + e.message, true); }
+      setLoading(btn, false);
+    }
+
+    // ─── LOGIN ───
+    async function doLogin() {
+      const btn = document.getElementById('login-btn');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) { showToast('⚠ Enter email and password', true); return; }
+
+      setLoading(btn, true);
+      try {
+        const data = await api('/api/login', 'POST', { email, password });
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('parklink_token', authToken);
+        localStorage.setItem('parklink_user', JSON.stringify(currentUser));
+        currentRole = currentUser.role;
+        updateNavUI();
+        showToast('✓ ' + data.message);
+        setTimeout(() => showSection(currentUser.role === 'driver' ? 'find' : 'list'), 600);
+      } catch (e) { showToast('✗ ' + e.message, true); }
+      setLoading(btn, false);
+    }
+
+    // ─── LOGOUT ───
+    async function doLogout() {
+      try { await api('/api/logout', 'POST'); } catch (e) { }
+      authToken = ''; currentUser = null;
+      localStorage.removeItem('parklink_token');
+      localStorage.removeItem('parklink_user');
+      updateNavUI();
+      showToast('✓ Signed out');
+      showSection('welcome');
+    }
+
+    // ─── GO DASHBOARD (with auth check) ───
+    function goDashboard() {
+      if (!currentUser) { showToast('⚠ Please sign in first', true); showSection('register'); return; }
+      showSection('dashboard');
+    }
+
+    // ─── LOAD SPOTS ───
+    async function loadSpots() {
+      try {
+        allSpots = await api('/api/spots');
+        renderSpots(allSpots);
+        renderMapPins(allSpots);
+      } catch (e) { console.error('Failed to load spots', e); }
+    }
+
+    function renderSpots(spots) {
+      const grid = document.getElementById('spots-grid');
+      if (!spots.length) { grid.innerHTML = '<p style="color:var(--dim)">No spots available.</p>'; return; }
+      grid.innerHTML = spots.map((s, i) => {
+        const filled = Math.round((1 - s.available / s.total_spots) * 5);
+        const dots = Array.from({ length: 5 }, (_, d) => `<div class="spot-dot${d < filled ? ' filled' : ''}"></div>`).join('');
+        const statusTxt = s.available > 0 ? `${s.available} spots left` : 'Full';
+        const statusCls = s.available > 0 ? '' : ' full';
+        return `<div class="spot-card" onclick="selectSpot(${i})">
+      <div class="spot-img">${s.emoji || '🏢'} <div class="spot-status${statusCls}">${statusTxt}</div></div>
+      <div class="spot-body">
+        <div class="spot-name">${s.name}</div>
+        <div class="spot-loc">📍 ${s.address}</div>
+        <div class="spot-meta">
+          <div class="spot-price">₹${s.peak_rate} <span>/ hr</span></div>
+          <div class="spot-dots">${dots}</div>
+        </div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    function renderMapPins(spots) {
+      const positions = [
+        { left: '28%', top: '20%' }, { left: '58%', top: '15%' },
+        { left: '72%', top: '55%' }, { left: '20%', top: '62%' }
+      ];
+      const pinsEl = document.getElementById('map-pins');
+      pinsEl.innerHTML = spots.slice(0, 4).map((s, i) => {
+        const pos = positions[i] || { left: `${20 + i * 15}%`, top: `${20 + i * 10}%` };
+        return `<div class="map-pin" style="left:${pos.left}; top:${pos.top}; animation-delay:-${i * 0.5}s;" onclick="selectSpot(${i})">
+      <div class="pin-bubble">₹${s.peak_rate}/hr</div>
+      <div class="pin-dot"></div><div class="pin-shadow"></div>
+    </div>`;
+      }).join('');
+    }
+
+    function filterSpots(query) {
+      const q = query.toLowerCase();
+      const filtered = q ? allSpots.filter(s => s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q)) : allSpots;
+      renderSpots(filtered);
+    }
+
+    // ─── SPOT SELECT ───
+    function selectSpot(i) {
+      selectedSpot = allSpots[i];
+      selectedSlotDate = selectedSlotFrom = selectedSlotTo = null;
+      if (!selectedSpot) return;
+      document.getElementById('panel-name').textContent = selectedSpot.name;
+      document.getElementById('panel-price').textContent = `₹${selectedSpot.peak_rate}/hr`;
+      document.getElementById('custom-time-panel').style.display = 'none';
+      document.getElementById('selected-slot-summary').style.display = 'none';
+      document.getElementById('booking-summary').style.display = 'none';
+      document.getElementById('booking-total').style.display = 'none';
+      document.getElementById('preorder-toggle').checked = false;
+      isPreOrder = false;
+      const panel = document.getElementById('reserve-panel');
+      panel.classList.add('open');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.getElementById('time-from').disabled = true;
+      document.getElementById('time-to').disabled = true;
+      document.getElementById('book-date').disabled = true;
+      setDefaultSlot();
+    }
+
+    function calcTotal() {
+      if (!selectedSpot) return;
+      const from = document.getElementById('time-from').value;
+      const to = document.getElementById('time-to').value;
+      const date = document.getElementById('book-date').value;
+      const [fh, fm] = from.split(':').map(Number);
+      const [th, tm] = to.split(':').map(Number);
+      let dur = (th * 60 + tm) - (fh * 60 + fm);
+      if (dur <= 0) dur = 60;
+      const hrs = Math.ceil(dur / 60);
+      let rate = selectedSpot.peak_rate;
+      const bookingDay = new Date(date).getDay();
+      if (bookingDay >= 5) {
+        rate = selectedSpot.weekend_rate;
+      } else if (fh >= 18 || fh < 8) {
+        rate = selectedSpot.offpeak_rate;
+      }
+      const total = hrs * rate;
+      document.getElementById('calc-dur').textContent = `${hrs} hr${hrs > 1 ? 's' : ''}`;
+      document.getElementById('calc-total').textContent = `₹${total}`;
+      return { hrs, total };
+    }
+
+    // ─── GO CONFIRM ───
+    function goConfirm() {
+      if (!currentUser) { showToast('⚠ Please sign in to book', true); showSection('register'); return; }
+      if (!selectedSpot) { showToast('⚠ Please select a spot', true); return; }
+      if (selectedSpot.available <= 0) { showToast('⚠ Slot unavailable for this location', true); return; }
+      const timeFrom = selectedSlotFrom || document.getElementById('time-from').value;
+      const timeTo = selectedSlotTo || document.getElementById('time-to').value;
+      if (selectedSlotFrom && selectedSlotTo) {
+        document.getElementById('book-date').value = selectedSlotDate;
+        document.getElementById('time-from').value = timeFrom;
+        document.getElementById('time-to').value = timeTo;
+      }
+      const r = calcTotal();
+      document.getElementById('cf-loc').textContent = selectedSpot.name;
+      document.getElementById('cf-date').textContent = document.getElementById('book-date').value;
+      document.getElementById('cf-time').textContent = `${timeFrom} – ${timeTo}`;
+      document.getElementById('cf-dur').textContent = `${r.hrs} hr${r.hrs > 1 ? 's' : ''}`;
+      document.getElementById('cf-total').textContent = `₹${r.total}`;
+      document.getElementById('download-invoice-btn').style.display = 'none';
+      showSection('confirm');
+    }
+
+    function selectPay(el) {
+      document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      renderPaymentFields(el.dataset.method);
+    }
+
+    function renderPaymentFields(method) {
+      const container = document.getElementById('payment-details');
+      const bankOptions = `
+        <option value="">Select your bank</option>
+        <option value="ICICI Bank">ICICI Bank</option>
+        <option value="Canara Bank">Canara Bank</option>
+        <option value="Indian Bank">Indian Bank</option>
+        <option value="State Bank of India">State Bank of India (SBI)</option>
+      `;
+      let html = `
+        <div class="payment-field"><label>Transfer Bank</label><select id="pm-bank">${bankOptions}</select></div>
+      `;
+      if (method === 'Card') {
+        html += `
+          <div class="payment-field"><label>Card Number</label><input id="pm-card-number" type="text" placeholder="1234 5678 9012 3456"></div>
+          <div class="payment-field"><label>Expiry</label><input id="pm-card-expiry" type="month"></div>
+          <div class="payment-field"><label>CVV</label><input id="pm-card-cvv" type="password" placeholder="123"></div>
+          <div class="payment-field"><label>Card Holder</label><input id="pm-card-holder" type="text" placeholder="Name on card"></div>
+        `;
+      } else if (method === 'UPI') {
+        html += `
+          <div class="payment-field"><label>UPI ID</label><input id="pm-upi-id" type="text" placeholder="example@upi"></div>
+          <div class="payment-field"><label>Payer Name</label><input id="pm-upi-name" type="text" placeholder="Your name"></div>
+          <div class="payment-field"><label>UPI PIN</label><input id="pm-upi-pin" type="password" placeholder="4-digit PIN"></div>
+        `;
+      } else if (method === 'ApplePay') {
+        html += `
+          <div class="payment-field"><label>Apple Pay Email</label><input id="pm-apple-email" type="email" placeholder="name@apple.com"></div>
+          <div class="payment-field"><label>Phone</label><input id="pm-apple-phone" type="text" placeholder="+91 99999 88888"></div>
+          <div class="payment-field"><label>Apple Pay PIN</label><input id="pm-apple-pin" type="password" placeholder="4-digit PIN"></div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function getPaymentDetails(method) {
+      const bank = document.getElementById('pm-bank')?.value.trim();
+      if (!bank) return { valid: false, message: 'Please select a bank.' };
+      const validBanks = ['ICICI Bank', 'Canara Bank', 'Indian Bank', 'State Bank of India'];
+      if (!validBanks.includes(bank)) {
+        return { valid: false, message: 'Invalid Bank Selection. Please choose from the approved list.' };
+      }
+      if (method === 'Card') {
+        const number = document.getElementById('pm-card-number')?.value.trim();
+        const expiry = document.getElementById('pm-card-expiry')?.value.trim();
+        const cvv = document.getElementById('pm-card-cvv')?.value.trim();
+        const name = document.getElementById('pm-card-holder')?.value.trim();
+        if (!number || !expiry || !cvv || !name) return { valid: false, message: 'Please enter your card details.' };
+        return { valid: true, value: { number, expiry, cvv, name, bank } };
+      }
+      if (method === 'UPI') {
+        const upi = document.getElementById('pm-upi-id')?.value.trim();
+        const name = document.getElementById('pm-upi-name')?.value.trim();
+        const pin = document.getElementById('pm-upi-pin')?.value.trim();
+        if (!upi || !name || !pin) return { valid: false, message: 'Please enter your UPI details and PIN.' };
+        return { valid: true, value: { upi, name, pin, bank } };
+      }
+      if (method === 'ApplePay') {
+        const email = document.getElementById('pm-apple-email')?.value.trim();
+        const phone = document.getElementById('pm-apple-phone')?.value.trim();
+        const pin = document.getElementById('pm-apple-pin')?.value.trim();
+        if (!email || !phone || !pin) return { valid: false, message: 'Please enter your Apple Pay details and PIN.' };
+        return { valid: true, value: { email, phone, pin, bank } };
+      }
+      return { valid: true, value: { bank } };
+    }
+
+    let lastInvoiceData = null;
+
+    async function downloadInvoice() {
+      if (!lastInvoiceData) { showToast('⚠ No invoice data available', true); return; }
+      try {
+        await ensurePDFLibrary();
+      } catch (err) {
+        showToast('✗ PDF load failed. Please refresh the page.', true);
+        console.error(err);
+        return;
+      }
+      try {
+        const jsPDFClass = window.jspdf?.jsPDF || window.jspdf?.default || window.jsPDF || window.jspdf;
+        if (!jsPDFClass) throw new Error('jsPDF constructor not found.');
+        const doc = new jsPDFClass();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 20;
+        let yPos = margin;
+
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(51, 102, 204);
+        doc.text('PARKLINK PARKING INVOICE', margin, yPos);
+        yPos += 10;
+
+        // Status and IDs
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Status: CONFIRMED', margin, yPos);
+        yPos += 6;
+        doc.text(`Booking Reference: ${lastInvoiceData.id}`, margin, yPos);
+        yPos += 10;
+
+        // Customer Details
+        doc.setFontSize(12);
+        doc.setTextColor(51, 102, 204);
+        doc.text('CUSTOMER DETAILS', margin, yPos);
+        yPos += 6;
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Name: ${lastInvoiceData.customer_name || 'Customer'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Email: ${lastInvoiceData.customer_email || 'N/A'}`, margin, yPos);
+        yPos += 10;
+
+        // Service Summary
+        doc.setFontSize(12);
+        doc.setTextColor(51, 102, 204);
+        doc.text('SERVICE SUMMARY', margin, yPos);
+        yPos += 6;
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Location: ${lastInvoiceData.location || 'N/A'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Date: ${lastInvoiceData.date || 'N/A'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Time: ${lastInvoiceData.time || 'N/A'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Duration: ${lastInvoiceData.duration || 'N/A'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Hourly Rate: Rs.${lastInvoiceData.hourly_rate || 0}`, margin, yPos);
+        yPos += 10;
+
+        // Billing Table
+        doc.setFontSize(11);
+        doc.setTextColor(51, 102, 204);
+        doc.text('ITEMIZED CHARGES', margin, yPos);
+        yPos += 6;
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(10);
+        doc.text('Description', margin, yPos);
+        doc.text('Amount', pageWidth - margin - 40, yPos);
+        yPos += 5;
+        doc.line(margin, yPos, pageWidth - margin, yPos);
+        yPos += 3;
+        doc.text('Parking Service', margin, yPos);
+        doc.text(`Rs.${lastInvoiceData.subtotal || 0}`, pageWidth - margin - 40, yPos);
+        yPos += 6;
+        doc.setTextColor(100, 100, 100);
+        doc.text('Tax (Included)', margin, yPos);
+        doc.text(`Rs.${lastInvoiceData.tax || 0}`, pageWidth - margin - 40, yPos);
+        yPos += 6;
+        doc.line(margin, yPos, pageWidth - margin, yPos);
+        yPos += 3;
+        doc.setFontSize(12);
+        doc.setTextColor(51, 102, 204);
+        doc.text('TOTAL DUE', margin, yPos);
+        doc.text(`Rs.${lastInvoiceData.amount || 0}`, pageWidth - margin - 40, yPos);
+        yPos += 10;
+
+        // Payment Info
+        doc.setFontSize(11);
+        doc.setTextColor(51, 102, 204);
+        doc.text('PAYMENT DETAILS', margin, yPos);
+        yPos += 6;
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Payment Method: ${lastInvoiceData.payment_method || 'UPI'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Bank: ${lastInvoiceData.bank || 'N/A'}`, margin, yPos);
+        yPos += 5;
+        doc.text(`Reference ID: ${lastInvoiceData.id}`, margin, yPos);
+        yPos += 10;
+
+        // Footer
+        doc.setFontSize(9);
+        doc.setTextColor(150, 150, 150);
+        doc.text('Thank you for parking with ParkLink!', margin, pageHeight - margin);
+        doc.text('Invoice Generated: ' + new Date().toLocaleString(), margin, pageHeight - margin + 5);
+
+        const filename = `ParkLink-Invoice-${lastInvoiceData.id}.pdf`;
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast('✓ Invoice downloaded successfully!', false);
+      } catch (e) {
+        console.error('PDF generation failed:', e);
+        showToast('✗ Failed to generate PDF: ' + e.message, true);
+      }
+    }
+
+    // ─── CONFIRM BOOKING ───
+    async function confirmBooking() {
+      if (!currentUser) { showToast('⚠ Please sign in first', true); return; }
+      const btn = document.getElementById('pay-btn');
+      const payMethod = document.querySelector('.pay-method.selected')?.dataset.method || 'UPI';
+      const payment = getPaymentDetails(payMethod);
+      if (!payment.valid) { showToast('⚠ ' + payment.message, true); return; }
+      setLoading(btn, true);
+      try {
+        const timeFrom = selectedSlotFrom || document.getElementById('time-from').value;
+        const timeTo = selectedSlotTo || document.getElementById('time-to').value;
+        const data = await api('/api/bookings', 'POST', {
+          spot_id: selectedSpot.id,
+          date: selectedSlotDate || document.getElementById('book-date').value,
+          time_from: timeFrom,
+          time_to: timeTo,
+          payment_method: payMethod,
+          bank: payment.value.bank
+        });
+        await loadSpots(); // refresh availability
+        const durationText = document.getElementById('calc-dur').textContent;
+        const [hourStr] = durationText.split(' ');
+        const hourNum = parseInt(hourStr) || 1;
+        const totalText = document.getElementById('calc-total').textContent.replace('₹', '').trim();
+        const totalAmount = parseFloat(totalText) || data.amount || 0;
+        const hourlyRate = totalAmount > 0 ? Math.round(totalAmount / hourNum) : 0;
+        lastInvoiceData = {
+          id: data.booking_ref || `BK-${String(data.id).padStart(5, '0')}`,
+          location: selectedSpot.name,
+          date: document.getElementById('book-date').value,
+          time: `${document.getElementById('time-from').value} – ${document.getElementById('time-to').value}`,
+          duration: durationText,
+          subtotal: Math.round(totalAmount),
+          tax: 0,
+          amount: Math.round(totalAmount),
+          payment_method: payMethod,
+          bank: payment.value.bank,
+          customer_name: currentUser.name,
+          customer_email: currentUser.email,
+          hourly_rate: hourlyRate,
+          payment_details: payment.value
+        };
+        console.log('Invoice data prepared:', lastInvoiceData);
+        document.getElementById('download-invoice-btn').style.display = 'block';
+        showToast('✓ Booking confirmed! Downloading invoice...');
+        await downloadInvoice();
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        showSection('dashboard');
+      } catch (e) { showToast('✗ ' + e.message, true); }
+      setLoading(btn, false);
+    }
+
+    // ─── DASHBOARD ───
+    async function loadDashboard() {
+      if (!currentUser) return;
+      try {
+        const d = await api('/api/dashboard');
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        if (d.role === 'driver') {
+          document.getElementById('dash-title').textContent = 'My Dashboard';
+          document.getElementById('dash-stats').innerHTML = `
+        <div class="stat-box"><div class="stat-icon">📋</div><div class="stat-label">Total Bookings</div><div class="stat-value">${d.stats.total_bookings}</div><div class="stat-sub">All time</div></div>
+        <div class="stat-box"><div class="stat-icon">💰</div><div class="stat-label">Total Spent</div><div class="stat-value">₹${Math.round(d.stats.total_spent)}</div><div class="stat-sub">All payments</div></div>
+        <div class="stat-box"><div class="stat-icon">🅿</div><div class="stat-label">Active Now</div><div class="stat-value">${d.stats.active_now}</div><div class="stat-sub">Current bookings</div></div>
+      `;
+          document.getElementById('dash-occupancy-card').style.display = 'none';
+          document.getElementById('dash-account-info').innerHTML =
+            `<b style="color:var(--white)">${currentUser.name}</b><br>${currentUser.email}<br><span style="color:var(--gold)">Driver Account</span>`;
+
+          const bookings = d.recent_bookings || [];
+          document.getElementById('my-bookings-list').innerHTML = bookings.length
+            ? bookings.map(b => `<div class="booking-item">
+            <div class="booking-icon">${b.emoji || '🚗'}</div>
+            <div class="booking-info"><div class="booking-name">${b.spot_name}</div><div class="booking-time">${b.time_from} – ${b.time_to} · ${b.date}</div></div>
+            <div style="text-align:right"><div class="booking-amt">₹${b.amount}</div><span class="status-badge status-${b.status}">${b.status}</span></div>
+          </div>`).join('')
+            : '<p style="color:var(--dim);font-size:13px">No bookings yet. Go explore!</p>';
+        } else {
+          // Owner
+          document.getElementById('dash-title').textContent = 'Owner Dashboard';
+          document.getElementById('dash-stats').innerHTML = `
+        <div class="stat-box"><div class="stat-icon">📋</div><div class="stat-label">Total Bookings</div><div class="stat-value">${d.stats.total_bookings}</div><div class="stat-sub">All time</div></div>
+        <div class="stat-box"><div class="stat-icon">💰</div><div class="stat-label">Revenue</div><div class="stat-value">₹${Math.round(d.stats.total_revenue)}</div><div class="stat-sub">Total earned</div></div>
+        <div class="stat-box"><div class="stat-icon">🅿</div><div class="stat-label">Occupancy</div><div class="stat-value">${d.stats.occupancy_pct}%</div><div class="stat-sub">${d.stats.total_spots - d.stats.available_spots} / ${d.stats.total_spots} spots</div></div>
+        <div class="stat-box"><div class="stat-icon">📍</div><div class="stat-label">Active Bookings</div><div class="stat-value">${d.stats.active_bookings}</div><div class="stat-sub">Confirmed</div></div>
+      `;
+          document.getElementById('dash-occupancy-card').style.display = '';
+          const occ = d.stats.occupancy_pct;
+          const circumference = 314;
+          document.getElementById('donut-arc').setAttribute('stroke-dashoffset', Math.round(circumference * (1 - occ / 100)));
+          document.getElementById('donut-val').textContent = occ + '%';
+          document.getElementById('donut-sub').textContent = `${d.stats.total_spots - d.stats.available_spots} of ${d.stats.total_spots} spots active`;
+          document.getElementById('dash-account-info').innerHTML =
+            `<b style="color:var(--white)">${currentUser.name}</b><br>${currentUser.email}<br><span style="color:var(--gold)">Owner Account</span>`;
+
+          const bookings = d.recent_bookings || [];
+          document.getElementById('my-bookings-list').innerHTML = bookings.length
+            ? bookings.map(b => `<div class="booking-item">
+            <div class="booking-icon">🚗</div>
+            <div class="booking-info"><div class="booking-name">${b.driver_name}</div><div class="booking-time">${b.spot_name} · ${b.time_from}–${b.time_to}</div></div>
+            <div class="booking-amt">₹${b.amount}</div>
+          </div>`).join('')
+            : '<p style="color:var(--dim);font-size:13px">No bookings yet.</p>';
+        }
+
+        // Chart
+        const weekly = d.weekly_activity || [];
+        const dowMap = {};
+        weekly.forEach(w => { dowMap[parseInt(w.dow)] = parseInt(w.cnt); });
+        const data7 = Array.from({ length: 7 }, (_, i) => dowMap[i] || 0);
+        buildChart(data7, days);
+
+        // Recent bookings panel
+        document.getElementById('recent-bookings').innerHTML = (d.recent_bookings || []).slice(0, 5).map(b => {
+          const icon = d.role === 'owner' ? '🚗' : (b.emoji || '🏢');
+          const label = d.role === 'owner' ? b.driver_name : b.spot_name;
+          return `<div class="booking-item">
+        <div class="booking-icon">${icon}</div>
+        <div class="booking-info"><div class="booking-name">${label}</div><div class="booking-time">${b.time_from} – ${b.time_to}</div></div>
+        <div class="booking-amt">₹${b.amount}</div>
+      </div>`;
+        }).join('') || '<p style="color:var(--dim);font-size:13px">No recent activity.</p>';
+
+      } catch (e) { console.error('Dashboard error', e); showToast('✗ Failed to load dashboard', true); }
+    }
+
+    // ─── OWNER PORTAL ───
+    async function loadOwnerPortal() {
+      if (!currentUser || currentUser.role !== 'owner') {
+        showToast('⚠ Owner access only', true); showSection('welcome'); return;
+      }
+      try {
+        const spots = await api('/api/my-spots');
+        const sel = document.getElementById('rate-spot-select');
+        sel.innerHTML = '<option value="">— Select a spot —</option>' +
+          spots.map(s => `<option value="${s.id}" data-peak="${s.peak_rate}" data-offpeak="${s.offpeak_rate}" data-weekend="${s.weekend_rate}">${s.name}</option>`).join('');
+
+        document.getElementById('managed-spots-list').innerHTML = spots.length
+          ? spots.map(s => `<div class="booking-item">
+          <div class="booking-icon">🏢</div>
+          <div class="booking-info"><div class="booking-name">${s.name}</div><div class="booking-time">${s.total_spots} Total · ${s.available} Available · ₹${s.total_revenue || 0} earned</div></div>
+          <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(0,200,100,0.15);color:#4eff99;border:1px solid rgba(0,200,100,0.3);">Live</span>
+        </div>`).join('')
+          : '<p style="color:var(--dim);font-size:13px">No spots listed yet.</p>';
+      } catch (e) { showToast('✗ ' + e.message, true); }
+    }
+
+    function loadSpotRates() {
+      const sel = document.getElementById('rate-spot-select');
+      const opt = sel.options[sel.selectedIndex];
+      if (!opt.value) return;
+      document.getElementById('rate-peak').value = opt.dataset.peak;
+      document.getElementById('rate-offpeak').value = opt.dataset.offpeak;
+      document.getElementById('rate-weekend').value = opt.dataset.weekend;
+    }
+
+    async function saveRates() {
+      const spotId = document.getElementById('rate-spot-select').value;
+      if (!spotId) { showToast('⚠ Select a spot first', true); return; }
+      try {
+        await api(`/api/spots/${spotId}/rates`, 'PUT', {
+          peak_rate: parseFloat(document.getElementById('rate-peak').value),
+          offpeak_rate: parseFloat(document.getElementById('rate-offpeak').value),
+          weekend_rate: parseFloat(document.getElementById('rate-weekend').value)
+        });
+        showToast('✓ Rates updated!');
+        loadSpots();
+      } catch (e) { showToast('✗ ' + e.message, true); }
+    }
+
+    async function addSpot() {
+      const name = document.getElementById('new-spot-name').value.trim();
+      const addr = document.getElementById('new-spot-addr').value.trim();
+      const total = document.getElementById('new-spot-total').value;
+      if (!name || !addr) { showToast('⚠ Name and address required', true); return; }
+      try {
+        await api('/api/spots', 'POST', { name, address: addr, total_spots: parseInt(total) || 10 });
+        showToast('✓ Spot listed successfully!');
+        document.getElementById('new-spot-name').value = '';
+        document.getElementById('new-spot-addr').value = '';
+        document.getElementById('new-spot-total').value = '';
+        loadOwnerPortal();
+        loadSpots();
+      } catch (e) { showToast('✗ ' + e.message, true); }
+    }
+
+    // ─── CHART ───
+    function buildChart(data, days) {
+      const barsEl = document.getElementById('chart-bars');
+      const daysEl = document.getElementById('chart-days');
+      const max = Math.max(...data, 1);
+      barsEl.innerHTML = '';
+      daysEl.innerHTML = '';
+      data.forEach((v, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'chart-bar-wrap';
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = `${(v / max) * 120}px`;
+        bar.style.animationDelay = `${i * 0.08}s`;
+        bar.setAttribute('data-val', v);
+        bar.title = `${days[i]}: ${v} bookings`;
+        wrap.appendChild(bar);
+        barsEl.appendChild(wrap);
+        const d = document.createElement('div');
+        d.className = 'chart-day';
+        d.style.flex = '1';
+        d.style.textAlign = 'center';
+        d.textContent = days[i];
+        daysEl.appendChild(d);
+      });
+    }
+
+    // ─── TOAST ───
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = msg;
+      t.classList.toggle('error', isError);
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ─── LOADING STATE ───
+    function setLoading(btn, loading) {
+      if (loading) {
+        btn.disabled = true;
+        btn._orig = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span>Loading…';
+      } else {
+        btn.disabled = false;
+        if (btn._orig) btn.innerHTML = btn._orig;
+      }
+    }
+  </script>
+</body>
+
+</html>
