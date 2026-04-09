@@ -35,7 +35,7 @@ MONGO_URI = "mongodb+srv://mithun:mithun%4019577@cluster0.2o6goxy.mongodb.net/?a
 DB_NAME = "parklink"
 
 try:
-   client = MongoClient(os.environ.get("MONGO_URI"))
+    client = MongoClient(os.environ.get("MONGO_URI"))
     db = client[DB_NAME]
     print("✅ Connected to MongoDB successfully!")
 except Exception as e:
