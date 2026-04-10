@@ -35,9 +35,12 @@ MONGO_URI = "mongodb+srv://mithun:mithun%4019577@cluster0.2o6goxy.mongodb.net/?a
 DB_NAME = "parklink"
 
 try:
-    client = MongoClient(os.environ.get("MONGO_URI"))
+    MONGO_URI = os.environ.get("MONGO_URI")
+    if not MONGO_URI:
+        raise Exception("MONGO_URI not set in environment variables!")
+    client = MongoClient(MONGO_URI)
     db = client[DB_NAME]
-    print("✅ Connected to MongoDB successfully!")
+    print("connection succes 200! code-s~")
 except Exception as e:
     print(f"❌ MongoDB Connection Error: {e}")
     print("Make sure to update MONGO_URI with your actual MongoDB password in app.py")
@@ -903,3 +906,4 @@ if __name__ == "__main__":
     print("\n✅  ParkLink backend ready with MongoDB!")
     print("🌐  Open http://localhost:5000 in your browser\n")
     app.run(debug=True, port=5000)
+
