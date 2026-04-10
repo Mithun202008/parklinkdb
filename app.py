@@ -31,19 +31,21 @@ def cors_after(response):
 # ─────────────────────────────────────────────
 
 # MongoDB Atlas connection with URL-encoded password
-MONGO_URI = "mongodb+srv://mithun:mithun%4019577@cluster0.2o6goxy.mongodb.net/?appName=Cluster0"
+
 DB_NAME = "parklink"
 
+MONGO_URI = os.environ.get("MONGO_URI")
+
+if not MONGO_URI:
+    raise Exception("MONGO_URI is missing in Vercel environment variables")
+
 try:
-    MONGO_URI = os.environ.get("MONGO_URI")
-    if not MONGO_URI:
-        raise Exception("MONGO_URI not set in environment variables!")
     client = MongoClient(MONGO_URI)
+    client.server_info()  # forces real connection check
     db = client[DB_NAME]
-    print("connection succes 200! code-s~")
+    print("✅ MongoDB connected")
 except Exception as e:
-    print(f"❌ MongoDB Connection Error: {e}")
-    print("Make sure to update MONGO_URI with your actual MongoDB password in app.py")
+    raise Exception(f"MongoDB connection failed: {e}")
 
 def init_db():
     """Initialize MongoDB collections and indexes"""
